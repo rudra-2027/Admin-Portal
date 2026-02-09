@@ -2,10 +2,18 @@ const Component = require("../models/Component");
 const emailService = require("./email.component.js");
 
 exports.createComponent = async (data, userId) => {
-  return Component.create({
+  const component = await Component.create({
     ...data,
     createdBy: userId
   });
+
+  // Populate creator info for the email
+  await component.populate("createdBy", "username email");
+
+  // Notify creator
+  emailService.notifyComponentCreated(component);
+
+  return component;
 };
 
 exports.updateComponent = async (componentId, data = {}, userId) => {
@@ -28,7 +36,15 @@ exports.updateComponent = async (componentId, data = {}, userId) => {
   delete data.createdBy;
 
   Object.assign(component, data);
-  return component.save();
+  await component.save();
+
+  // Populate creator info for the email
+  await component.populate("createdBy", "username email");
+
+  // Notify creator
+  emailService.notifyComponentUpdated(component);
+
+  return component;
 };
 
 exports.deleteComponent = async (componentId, userId) => {
@@ -40,6 +56,12 @@ exports.deleteComponent = async (componentId, userId) => {
   if (!component) {
     throw new Error("Component not found or access denied");
   }
+
+  // Populate creator info for the email (from the deleted component)
+  await component.populate("createdBy", "username email");
+
+  // Notify creator
+  emailService.notifyComponentDeleted(component);
 
   return component;
 };

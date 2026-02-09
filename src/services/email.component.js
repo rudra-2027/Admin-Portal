@@ -74,3 +74,130 @@ exports.notifyStatusChange = async (component, status) => {
   `;
     return sendEmail(creatorEmail, subject, html);
 };
+
+/**
+ * Notify user when their account is created
+ * @param {object} user - The user document
+ * @param {string} password - The plain text password (only for creation)
+ */
+exports.notifyUserCreated = async (user, password) => {
+    const subject = "Welcome to PUI Admin Portal";
+    const html = `
+    <h2>Welcome, ${user.username}!</h2>
+    <p>Your account has been created successfully.</p>
+    <ul>
+      <li><strong>Username:</strong> ${user.username}</li>
+      <li><strong>Email:</strong> ${user.email}</li>
+      <li><strong>Role:</strong> ${user.role}</li>
+      <li><strong>Temporary Password:</strong> ${password}</li>
+    </ul>
+    <p>Please log in and change your password as soon as possible.</p>
+    <p>Best regards,<br/>PUI Team</p>
+  `;
+    return sendEmail(user.email, subject, html);
+};
+
+/**
+ * Notify user when their account is updated
+ * @param {object} user - The user document
+ */
+exports.notifyUserUpdated = async (user) => {
+    const subject = "Account Update Notification";
+    const html = `
+    <h2>Hello ${user.username},</h2>
+    <p>Your account details have been updated by an administrator.</p>
+    <ul>
+      <li><strong>Status:</strong> ${user.isActive ? "Active" : "Inactive"}</li>
+      <li><strong>Role:</strong> ${user.role}</li>
+    </ul>
+    <p>If you did not expect this change, please contact support.</p>
+    <p>Best regards,<br/>PUI Team</p>
+  `;
+    return sendEmail(user.email, subject, html);
+};
+
+/**
+ * Notify user when their account is deleted
+ * @param {object} user - The user document
+ */
+exports.notifyUserDeleted = async (user) => {
+    const subject = "Account Deletion Notification";
+    const html = `
+    <h2>Hello ${user.username},</h2>
+    <p>Your account has been removed from the PUI Admin Portal.</p>
+    <p>If you have any questions, please contact the administration team.</p>
+    <p>Best regards,<br/>PUI Team</p>
+  `;
+    return sendEmail(user.email, subject, html);
+};
+
+/**
+ * Notify creator when a new component is created
+ * @param {object} component - The component document (populated with createdBy)
+ */
+exports.notifyComponentCreated = async (component) => {
+    const creatorEmail = component.createdBy?.email;
+    if (!creatorEmail) return;
+
+    const subject = `Component Created: ${component.title}`;
+    const html = `
+    <h2>Component Created</h2>
+    <p>Your component <strong>${component.title}</strong> has been created as a draft.</p>
+    <p>You can now submit it for approval from your dashboard.</p>
+    <p>Best regards,<br/>PUI Team</p>
+  `;
+    return sendEmail(creatorEmail, subject, html);
+};
+
+/**
+ * Notify creator when their component is updated
+ * @param {object} component - The component document (populated with createdBy)
+ */
+exports.notifyComponentUpdated = async (component) => {
+    const creatorEmail = component.createdBy?.email;
+    if (!creatorEmail) return;
+
+    const subject = `Component Updated: ${component.title}`;
+    const html = `
+    <h2>Component Updated</h2>
+    <p>Your component <strong>${component.title}</strong> has been updated successfully.</p>
+    <p>Best regards,<br/>PUI Team</p>
+  `;
+    return sendEmail(creatorEmail, subject, html);
+};
+
+/**
+ * Notify creator when their component is deleted
+ * @param {object} component - The component document (populated with createdBy)
+ */
+exports.notifyComponentDeleted = async (component) => {
+    const creatorEmail = component.createdBy?.email;
+    if (!creatorEmail) return;
+
+    const subject = `Component Deleted: ${component.title}`;
+    const html = `
+    <h2>Component Deleted</h2>
+    <p>Your component <strong>${component.title}</strong> has been removed from the platform.</p>
+    <p>Best regards,<br/>PUI Team</p>
+  `;
+    return sendEmail(creatorEmail, subject, html);
+};
+
+/**
+ * Notify creator when their component is featured/unfeatured
+ * @param {object} component - The component document (populated with createdBy)
+ * @param {boolean} isFeatured - Featured status
+ */
+exports.notifyComponentFeatured = async (component, isFeatured) => {
+    const creatorEmail = component.createdBy?.email;
+    if (!creatorEmail) return;
+
+    const subject = `Component ${isFeatured ? "Featured" : "Unfeatured"}: ${component.title}`;
+    const html = `
+    <h2>Featured Status Update</h2>
+    <p>Your component <strong>${component.title}</strong> is now <strong>${isFeatured ? "Featured" : "no longer Featured"}</strong> on the platform.</p>
+    ${isFeatured ? "<p>Congratulations! Featured components get higher visibility.</p>" : ""}
+    <p>Best regards,<br/>PUI Team</p>
+  `;
+    return sendEmail(creatorEmail, subject, html);
+};

@@ -32,6 +32,10 @@ exports.createUser = async (req, res) => {
     const userResponse = user.toObject();
     delete userResponse.password;
 
+    // Send welcome email
+    const emailService = require("../services/email.component.js");
+    emailService.notifyUserCreated(user, password);
+
     res.status(201).json(userResponse);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -56,15 +60,15 @@ exports.updateUser = async (req, res) => {
     const { isActive, role, password } = req.body;
 
     const updateData = {};
-    
+
     if (typeof isActive !== "undefined") {
       updateData.isActive = isActive;
     }
-    
+
     if (role) {
       updateData.role = role;
     }
-    
+
     if (password) {
       updateData.password = await authService.hashPassword(password);
     }
@@ -78,6 +82,10 @@ exports.updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    // Send update notification
+    const emailService = require("../services/email.component.js");
+    emailService.notifyUserUpdated(user);
 
     res.json(user);
   } catch (error) {
@@ -94,6 +102,10 @@ exports.deleteUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
+
+    // Send deletion notification
+    const emailService = require("../services/email.component.js");
+    emailService.notifyUserDeleted(user);
 
     res.json({ message: "User deleted successfully" });
   } catch (error) {

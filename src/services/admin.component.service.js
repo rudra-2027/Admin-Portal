@@ -36,13 +36,29 @@ exports.toggleFeature = async (componentId, isFeatured) => {
   }
 
   component.isFeatured = isFeatured;
-  return component.save();
+  await component.save();
+
+  // Populate creator info for the email
+  await component.populate("createdBy", "username email");
+
+  // Notify creator
+  emailService.notifyComponentFeatured(component, isFeatured);
+
+  return component;
 };
 
 exports.adminDelete = async (componentId) => {
   const component = await Component.findByIdAndDelete(componentId);
+
   if (!component) {
     throw new Error("Component not found");
   }
+
+  // Populate creator info for the email
+  await component.populate("createdBy", "username email");
+
+  // Notify creator
+  emailService.notifyComponentDeleted(component);
+
   return component;
 };
