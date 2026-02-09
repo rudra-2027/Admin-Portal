@@ -13,8 +13,27 @@ const userRoutes = require("./routes/user.routes");
 
 const app = express();
 
+// Handle double slashes in URLs (e.g., //api/auth/login)
+app.use((req, res, next) => {
+  if (req.url.includes("//")) {
+    req.url = req.url.replace(/\/+/g, "/");
+  }
+  next();
+});
+
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://admin-portal-frontend-alpha.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:3000",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 app.get("/health", (req, res) => {

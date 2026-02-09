@@ -3,7 +3,7 @@ const User = require("../src/models/UserModel");
 const { hashPassword } = require("../src/services/auth.services");
 
 (async () => {
-  await mongoose.connect("mongodb://127.0.0.1:27017/pui");
+  await mongoose.connect("mongodb+srv://rudragupta200408_db_user:projectUi-admin123@pui-admin.q6ukcxu.mongodb.net/?appName=PUI-ADMIN");
 
   const user = new User({
     username: "admin",
