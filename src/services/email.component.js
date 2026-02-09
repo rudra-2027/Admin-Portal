@@ -10,9 +10,14 @@ const transporter = nodemailer.createTransport({
   },
   tls: {
     ciphers: "SSLv3",
+    rejectUnauthorized: false, // Help with some strict firewall/proxy issues
   },
   // Force IPv4 to avoid ENETUNREACH on some networks
   family: 4,
+  // Add timeouts for slower cloud environments (Render/Vercel)
+  connectionTimeout: 20000, // 20 seconds
+  greetingTimeout: 20000,
+  socketTimeout: 20000,
 });
 
 /**

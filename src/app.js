@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 
 app.use(helmet());
 app.use(cors({
-  origin: ["https://admin-portal-frontend-alpha.vercel.app", "http://localhost:5173"],
+  origin: ["https://admin-portal-frontend-alpha.vercel.app", "http://localhost:5173", "https://admin-portal-rouge-eight.vercel.app"],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
