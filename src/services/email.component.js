@@ -8,6 +8,11 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    ciphers: "SSLv3",
+  },
+  // Force IPv4 to avoid ENETUNREACH on some networks
+  family: 4,
 });
 
 /**
