@@ -82,6 +82,18 @@ exports.notifyStatusChange = async (component, status) => {
       : "<p>If you have any questions regarding the rejection, please contact the admin team.</p>"}
     <p>Best regards,<br/>PUI Team</p>
   `;
+
+  // Also notify admin
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail) {
+    const adminSubject = `Component ${status.charAt(0).toUpperCase() + status.slice(1)}: ${component.title}`;
+    const adminHtml = `
+      <h2>Component Status Update</h2>
+      <p>User <strong>${component.createdBy?.username || "Unknown"}</strong>'s component <strong>${component.title}</strong> has been <strong>${status}</strong>.</p>
+    `;
+    sendEmail(adminEmail, adminSubject, adminHtml).catch(err => console.error("Failed to notify admin of status change:", err.message));
+  }
+
   return sendEmail(creatorEmail, subject, html);
 };
 
@@ -156,6 +168,20 @@ exports.notifyComponentCreated = async (component) => {
     <p>You can now submit it for approval from your dashboard.</p>
     <p>Best regards,<br/>PUI Team</p>
   `;
+
+  // Also notify admin
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail) {
+    const adminSubject = `New Component Created: ${component.title}`;
+    const adminHtml = `
+      <h2>New Component Created</h2>
+      <p>User <strong>${component.createdBy?.username || "Unknown"}</strong> has created a new component: <strong>${component.title}</strong>.</p>
+      <p>It is currently in <strong>${component.status}</strong> status.</p>
+      <p>Review it in the dashboard.</p>
+    `;
+    sendEmail(adminEmail, adminSubject, adminHtml).catch(err => console.error("Failed to notify admin of creation:", err.message));
+  }
+
   return sendEmail(creatorEmail, subject, html);
 };
 
@@ -173,6 +199,19 @@ exports.notifyComponentUpdated = async (component) => {
     <p>Your component <strong>${component.title}</strong> has been updated successfully.</p>
     <p>Best regards,<br/>PUI Team</p>
   `;
+
+  // Also notify admin
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail) {
+    const adminSubject = `Component Updated: ${component.title}`;
+    const adminHtml = `
+      <h2>Component Updated</h2>
+      <p>User <strong>${component.createdBy?.username || "Unknown"}</strong> has updated their component: <strong>${component.title}</strong>.</p>
+      <p>Review the changes in the dashboard.</p>
+    `;
+    sendEmail(adminEmail, adminSubject, adminHtml).catch(err => console.error("Failed to notify admin of update:", err.message));
+  }
+
   return sendEmail(creatorEmail, subject, html);
 };
 
@@ -190,6 +229,18 @@ exports.notifyComponentDeleted = async (component) => {
     <p>Your component <strong>${component.title}</strong> has been removed from the platform.</p>
     <p>Best regards,<br/>PUI Team</p>
   `;
+
+  // Also notify admin
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail) {
+    const adminSubject = `Component Deleted: ${component.title}`;
+    const adminHtml = `
+      <h2>Component Deleted</h2>
+      <p>User <strong>${component.createdBy?.username || "Unknown"}</strong> has deleted their component: <strong>${component.title}</strong>.</p>
+    `;
+    sendEmail(adminEmail, adminSubject, adminHtml).catch(err => console.error("Failed to notify admin of deletion:", err.message));
+  }
+
   return sendEmail(creatorEmail, subject, html);
 };
 

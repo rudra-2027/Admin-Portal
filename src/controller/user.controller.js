@@ -3,7 +3,11 @@ const authService = require("../services/auth.services");
 
 exports.createUser = async (req, res) => {
   try {
-    const { username, email, password, role } = req.body;
+    let { username, email, password, role } = req.body;
+
+    // Normalize casing
+    username = username?.toLowerCase();
+    email = email?.toLowerCase();
 
     // Validation
     if (!username || !email || !password) {

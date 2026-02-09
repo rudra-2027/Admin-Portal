@@ -1,11 +1,15 @@
 const authService = require("../services/auth.services");
 const User = require("../models/UserModel");
+const RefreshToken = require("../models/RefreshToken");
 
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
 
-  const user = await User.findOne({ username, isActive: true });
+  // Normalize username to lowercase for case-insensitive login
+  const normalizedUsername = username.toLowerCase();
+
+  const user = await User.findOne({ username: normalizedUsername, isActive: true });
   if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
   const valid = await authService.comparePassword(password, user.password);
