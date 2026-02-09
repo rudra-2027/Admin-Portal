@@ -34,7 +34,7 @@ exports.createUser = async (req, res) => {
 
     // Send welcome email
     const emailService = require("../services/email.component.js");
-    emailService.notifyUserCreated(user, password);
+    await emailService.notifyUserCreated(user, password);
 
     res.status(201).json(userResponse);
   } catch (error) {
@@ -85,7 +85,7 @@ exports.updateUser = async (req, res) => {
 
     // Send update notification
     const emailService = require("../services/email.component.js");
-    emailService.notifyUserUpdated(user);
+    await emailService.notifyUserUpdated(user);
 
     res.json(user);
   } catch (error) {
@@ -105,7 +105,7 @@ exports.deleteUser = async (req, res) => {
 
     // Send deletion notification
     const emailService = require("../services/email.component.js");
-    emailService.notifyUserDeleted(user);
+    await emailService.notifyUserDeleted(user);
 
     res.json({ message: "User deleted successfully" });
   } catch (error) {

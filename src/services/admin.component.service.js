@@ -42,7 +42,7 @@ exports.toggleFeature = async (componentId, isFeatured) => {
   await component.populate("createdBy", "username email");
 
   // Notify creator
-  emailService.notifyComponentFeatured(component, isFeatured);
+  await emailService.notifyComponentFeatured(component, isFeatured);
 
   return component;
 };
@@ -58,7 +58,7 @@ exports.adminDelete = async (componentId) => {
   await component.populate("createdBy", "username email");
 
   // Notify creator
-  emailService.notifyComponentDeleted(component);
+  await emailService.notifyComponentDeleted(component);
 
   return component;
 };

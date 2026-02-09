@@ -11,7 +11,7 @@ exports.createComponent = async (data, userId) => {
   await component.populate("createdBy", "username email");
 
   // Notify creator
-  emailService.notifyComponentCreated(component);
+  await emailService.notifyComponentCreated(component);
 
   return component;
 };
@@ -42,7 +42,7 @@ exports.updateComponent = async (componentId, data = {}, userId) => {
   await component.populate("createdBy", "username email");
 
   // Notify creator
-  emailService.notifyComponentUpdated(component);
+  await emailService.notifyComponentUpdated(component);
 
   return component;
 };
@@ -61,7 +61,7 @@ exports.deleteComponent = async (componentId, userId) => {
   await component.populate("createdBy", "username email");
 
   // Notify creator
-  emailService.notifyComponentDeleted(component);
+  await emailService.notifyComponentDeleted(component);
 
   return component;
 };
