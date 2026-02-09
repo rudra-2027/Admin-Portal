@@ -10,13 +10,17 @@ exports.uploadPreview = async (req, res) => {
     return res.status(404).json({ error: "Component not found" });
   }
 
-  const imageUrl = req.file.path;
+  if (!req.files || req.files.length === 0) {
+    return res.status(400).json({ error: "No images uploaded" });
+  }
 
-  component.previewImages.push(imageUrl);
+  const imageUrls = req.files.map(file => file.path);
+
+  component.previewImages.push(...imageUrls);
   await component.save();
 
   res.json({
-    message: "Image uploaded",
-    image: imageUrl
+    message: "Images uploaded successfully",
+    images: imageUrls
   });
 };

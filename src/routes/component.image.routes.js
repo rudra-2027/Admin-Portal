@@ -7,7 +7,7 @@ const controller = require("../controller/component.image.controller");
 router.post(
   "/:id/images",
   protect(["CONTRIBUTOR", "ADMIN"]),
-  upload.single("image"),
+  upload.array("images", 5),
   controller.uploadPreview
 );
 

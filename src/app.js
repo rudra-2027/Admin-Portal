@@ -22,18 +22,12 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet());
-app.use(
-  cors({
-    origin: [
-      "https://admin-portal-frontend-alpha.vercel.app",
-      "http://localhost:5173",
-      "http://localhost:3000",
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors({
+  origin: ["https://admin-portal-frontend-alpha.vercel.app", "http://localhost:5173"],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 app.use(express.json());
 
 app.get("/health", (req, res) => {
