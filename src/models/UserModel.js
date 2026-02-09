@@ -27,7 +27,8 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Pre-save hook to enforce casing
-userSchema.pre('save', function (next) {
+// Pre-save hook to enforce casing
+userSchema.pre('save', async function () {
   if (this.isModified('username')) {
     this.username = this.username.toLowerCase();
   }
@@ -37,7 +38,6 @@ userSchema.pre('save', function (next) {
   if (this.isModified('role')) {
     this.role = this.role.toUpperCase();
   }
-  next();
 });
 
 module.exports = mongoose.model("User", userSchema);
