@@ -6,28 +6,40 @@ exports.pending = async (req, res) => {
 };
 
 exports.updateStatus = async (req, res) => {
-  const { status } = req.body;
+  try {
+    const { status } = req.body;
 
-  const component = await adminService.updateStatus(
-    req.params.id,
-    status
-  );
+    const component = await adminService.updateStatus(
+      req.params.id,
+      status
+    );
 
-  res.json(component);
+    res.json(component);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.feature = async (req, res) => {
-  const { isFeatured } = req.body;
+  try {
+    const { isFeatured } = req.body;
 
-  const component = await adminService.toggleFeature(
-    req.params.id,
-    isFeatured
-  );
+    const component = await adminService.toggleFeature(
+      req.params.id,
+      isFeatured
+    );
 
-  res.json(component);
+    res.json(component);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.remove = async (req, res) => {
-  await adminService.adminDelete(req.params.id);
-  res.json({ message: "Component deleted by admin" });
+  try {
+    await adminService.adminDelete(req.params.id);
+    res.json({ message: "Component deleted by admin" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

@@ -3,7 +3,7 @@ const emailService = require("./src/services/email.component");
 
 const mockUser = {
     username: "testuser",
-    email: "test@example.com",
+    email: "rudragupta082004@gmail.com",
     role: "CONTRIBUTOR",
     isActive: true
 };
@@ -13,7 +13,7 @@ const mockComponent = {
     category: "UI",
     createdBy: {
         username: "testcreator",
-        email: "creator@example.com"
+        email: "rudragupta200408@gmail.com"
     }
 };
 
